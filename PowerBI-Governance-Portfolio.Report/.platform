@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "PowerBI-Governance-Portfolio"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "37de5da3-c3f6-400f-8791-4bb9a9841962"
+  }
+}
