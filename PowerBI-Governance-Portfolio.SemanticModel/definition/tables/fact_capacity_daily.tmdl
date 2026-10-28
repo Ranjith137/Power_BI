@@ -1,0 +1,72 @@
+table fact_capacity_daily
+	lineageTag: 4a609659-be4f-4829-a511-482464342f19
+
+	column capacity_id
+		dataType: string
+		lineageTag: 3a31c4a4-b131-4fcb-98e6-8b64369aa55d
+		summarizeBy: none
+		sourceColumn: capacity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: daf8d78b-694b-4596-8779-83251db2d599
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cu_utilization_pct
+		dataType: double
+		lineageTag: a0496116-a64b-4d84-bce3-f1af9373a985
+		summarizeBy: sum
+		sourceColumn: cu_utilization_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column memory_pct
+		dataType: double
+		lineageTag: ad6fb7c1-e413-4c67-bc57-b6fd42db44b5
+		summarizeBy: sum
+		sourceColumn: memory_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column overloaded_minutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 381d1b43-37aa-4bdb-b539-d5959354c41f
+		summarizeBy: sum
+		sourceColumn: overloaded_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+	column throttled_minutes
+		dataType: int64
+		formatString: 0
+		lineageTag: bfc04d3c-38b6-4f26-8853-f554e8f050a4
+		summarizeBy: sum
+		sourceColumn: throttled_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_capacity_daily = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\fact_capacity_daily.csv"), [Delimiter = ",", Columns = 6, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"capacity_id", type text}, {"date", type date}, {"cu_utilization_pct", type number}, {"memory_pct", type number}, {"overloaded_minutes", Int64.Type}, {"throttled_minutes", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

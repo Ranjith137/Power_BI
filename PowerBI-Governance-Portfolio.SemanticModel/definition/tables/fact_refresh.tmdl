@@ -1,0 +1,85 @@
+table fact_refresh
+	lineageTag: b90d67b2-3592-48ff-88a8-8b1c29ca5629
+
+	column refresh_id
+		dataType: string
+		lineageTag: 162faa2e-4bf7-46a7-a8f8-6efca304fe4a
+		summarizeBy: none
+		sourceColumn: refresh_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataset_id
+		dataType: string
+		lineageTag: 38c02082-a97f-409b-87a4-f72f7e74d699
+		summarizeBy: none
+		sourceColumn: dataset_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8b6a13d6-c091-447c-b142-5356aa643f39
+		summarizeBy: none
+		sourceColumn: start_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 13b9af87-eddb-4470-8e05-f4bdf01d1df6
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column duration_min
+		dataType: double
+		lineageTag: c08bfa23-be01-4a19-8a8d-67beac0263fe
+		summarizeBy: sum
+		sourceColumn: duration_min
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column status
+		dataType: string
+		lineageTag: d8e5a1b1-1ec7-4be9-90da-06b08122305a
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column error_code
+		dataType: string
+		lineageTag: ae0749c1-0622-4251-8f25-e3e62bc2b632
+		summarizeBy: none
+		sourceColumn: error_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacity_id
+		dataType: string
+		lineageTag: c01d12e7-e565-40f9-af2e-e8a9ff60dc90
+		summarizeBy: none
+		sourceColumn: capacity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_refresh = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\fact_refresh.csv"), [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"refresh_id", type text}, {"dataset_id", type text}, {"start_time", type datetime}, {"date", type date}, {"duration_min", type number}, {"status", type text}, {"error_code", type text}, {"capacity_id", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

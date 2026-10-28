@@ -1,0 +1,56 @@
+table dim_datasource
+	lineageTag: 634cd3d8-3e99-473a-9d98-5eb4daf85e0f
+
+	column datasource_id
+		dataType: string
+		lineageTag: d890f024-910c-44c8-8e13-2b7e86f89085
+		summarizeBy: none
+		sourceColumn: datasource_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataset_id
+		dataType: string
+		lineageTag: 4eebdf27-1615-4e40-8511-ab01a192f102
+		summarizeBy: none
+		sourceColumn: dataset_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_type
+		dataType: string
+		lineageTag: 93a8419a-19f5-46ac-8eb2-1e8761ea5649
+		summarizeBy: none
+		sourceColumn: source_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column credential_type
+		dataType: string
+		lineageTag: 99e023d3-b4b5-4706-9da0-21c0ed460986
+		summarizeBy: none
+		sourceColumn: credential_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_unmanaged_source
+		dataType: int64
+		formatString: 0
+		lineageTag: 4fa858f2-a191-4964-a0b9-9167b0fd89ee
+		summarizeBy: sum
+		sourceColumn: is_unmanaged_source
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_datasource = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_datasource.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"datasource_id", type text}, {"dataset_id", type text}, {"source_type", type text}, {"credential_type", type text}, {"is_unmanaged_source", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,118 @@
+table dim_workspace
+	lineageTag: 7d0d6d59-48cb-4734-89ba-2738c4d95b8f
+
+	column workspace_id
+		dataType: string
+		lineageTag: 8cb5c7fb-90ea-4f86-a943-d329207ea60a
+		summarizeBy: none
+		sourceColumn: workspace_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column workspace_name
+		dataType: string
+		lineageTag: 6921b589-ea02-4b14-8140-282ea2c3a641
+		summarizeBy: none
+		sourceColumn: workspace_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column workspace_type
+		dataType: string
+		lineageTag: 7b914ae8-8e24-4d62-a766-3a7cb11c5f1c
+		summarizeBy: none
+		sourceColumn: workspace_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 604f5eba-5ed7-45f9-a79b-f3c5aec6a93e
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacity_id
+		dataType: string
+		lineageTag: 131eef67-c0af-4519-ab6d-f36431d0d776
+		summarizeBy: none
+		sourceColumn: capacity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column department
+		dataType: string
+		lineageTag: 4434124b-38d0-4cba-a5e2-a7247f4298ff
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5767cec4-e3ce-416b-88ca-5c62507fdd89
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column has_description
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a9dea0c-93bf-4021-bc8b-70a7120012a9
+		summarizeBy: sum
+		sourceColumn: has_description
+
+		annotation SummarizationSetBy = Automatic
+
+	column environment
+		dataType: string
+		lineageTag: 6a2d43f5-47cb-47df-b1e0-d101a2330e7d
+		summarizeBy: none
+		sourceColumn: environment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Active Admin Count' =
+			
+			CALCULATE (
+			    COUNTROWS ( bridge_workspace_access ),
+			    bridge_workspace_access[role] = "Admin",
+			    bridge_workspace_access[is_account_enabled] = 1
+			)
+		formatString: 0
+		lineageTag: bf6b51ba-707c-44d8-bca5-727f6a4178bb
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Orphaned' =
+			
+			IF (
+			    dim_workspace[state] = "Active"
+			        && dim_workspace[Active Admin Count] = 0,
+			    1,
+			    0
+			)
+		formatString: 0
+		lineageTag: a0f3f770-b2d6-4442-a8ff-93fc3affda85
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_workspace = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_workspace.csv"), [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"workspace_id", type text}, {"workspace_name", type text}, {"workspace_type", type text}, {"state", type text}, {"capacity_id", type text}, {"department", type text}, {"created_date", type date}, {"has_description", Int64.Type}, {"environment", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

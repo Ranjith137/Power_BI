@@ -1,0 +1,56 @@
+table dim_capacity
+	lineageTag: 3b36aae4-b180-4521-9ed6-da0cb662d225
+
+	column capacity_id
+		dataType: string
+		lineageTag: 03d98c19-bd4e-432f-8a24-efdd3ade9c0d
+		summarizeBy: none
+		sourceColumn: capacity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacity_name
+		dataType: string
+		lineageTag: b7d49331-27cd-459b-9286-b0e0f25258f2
+		summarizeBy: none
+		sourceColumn: capacity_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku
+		dataType: string
+		lineageTag: 433084aa-7fe0-4239-adce-d18f13332b45
+		summarizeBy: none
+		sourceColumn: sku
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 80396f4f-e115-4b09-845e-5e978dfccddd
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacity_units
+		dataType: int64
+		formatString: 0
+		lineageTag: ce3af0bb-560f-49e8-bb4c-546dfb5c063a
+		summarizeBy: sum
+		sourceColumn: capacity_units
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_capacity = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_capacity.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"capacity_id", type text}, {"capacity_name", type text}, {"sku", type text}, {"region", type text}, {"capacity_units", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

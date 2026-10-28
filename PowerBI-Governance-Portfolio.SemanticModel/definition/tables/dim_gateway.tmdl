@@ -1,0 +1,74 @@
+table dim_gateway
+	lineageTag: bec9e839-d43a-44c6-abda-49b58c940959
+
+	column gateway_id
+		dataType: string
+		lineageTag: e5e01410-5008-4ccf-b4db-5ebff162e2e6
+		summarizeBy: none
+		sourceColumn: gateway_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gateway_name
+		dataType: string
+		lineageTag: 4ccdd80c-8061-4d5a-8ff7-aa628346b3e3
+		summarizeBy: none
+		sourceColumn: gateway_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column gateway_type
+		dataType: string
+		lineageTag: a15d5cfe-2b38-4e0b-970e-3ea7766b614e
+		summarizeBy: none
+		sourceColumn: gateway_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 194e0833-a917-427d-a741-696307c39c28
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: c26766d7-8cd5-4961-9eb7-343572abbc68
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column version
+		dataType: double
+		lineageTag: e344629d-94f9-4968-a1fc-97d041504565
+		summarizeBy: none
+		sourceColumn: version
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cluster_members
+		dataType: int64
+		formatString: 0
+		lineageTag: 9de31cd9-989a-4598-affa-18e74a462745
+		summarizeBy: none
+		sourceColumn: cluster_members
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_gateway = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_gateway.csv"), [Delimiter = ",", Columns = 7, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"gateway_id", type text}, {"gateway_name", type text}, {"gateway_type", type text}, {"region", type text}, {"status", type text}, {"version", type number}, {"cluster_members", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

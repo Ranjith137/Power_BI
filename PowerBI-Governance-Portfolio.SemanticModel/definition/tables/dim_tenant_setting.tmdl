@@ -1,0 +1,56 @@
+table dim_tenant_setting
+	lineageTag: 0d463e31-f086-4982-8a19-2c44bffcb74a
+
+	column setting_name
+		dataType: string
+		lineageTag: 715f4a51-266d-43d5-88a8-1e1637e766f1
+		summarizeBy: none
+		sourceColumn: setting_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_value
+		dataType: string
+		lineageTag: 57ae962c-4003-43bb-b606-7140ab48192a
+		summarizeBy: none
+		sourceColumn: current_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_level
+		dataType: string
+		lineageTag: d485ef17-490e-42de-adc0-d34f841e1f68
+		summarizeBy: none
+		sourceColumn: risk_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column needs_review
+		dataType: int64
+		formatString: 0
+		lineageTag: b53cd882-6f1b-4060-b490-ee56528b8bdf
+		summarizeBy: sum
+		sourceColumn: needs_review
+
+		annotation SummarizationSetBy = Automatic
+
+	column recommendation
+		dataType: string
+		lineageTag: 29cf7ae1-6109-429f-bb09-355487872532
+		summarizeBy: none
+		sourceColumn: recommendation
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_tenant_setting = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_tenant_setting.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"setting_name", type text}, {"current_value", type text}, {"risk_level", type text}, {"needs_review", Int64.Type}, {"recommendation", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

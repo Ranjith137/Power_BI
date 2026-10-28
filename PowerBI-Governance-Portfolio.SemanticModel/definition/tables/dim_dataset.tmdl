@@ -1,0 +1,127 @@
+table dim_dataset
+	lineageTag: 3759c227-8fb4-40c0-b800-3643b30e56f6
+
+	column dataset_id
+		dataType: string
+		lineageTag: 18ad0df8-c474-4220-99b8-f64b42a89479
+		summarizeBy: none
+		sourceColumn: dataset_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataset_name
+		dataType: string
+		lineageTag: 0783cead-20fe-4b5e-a8b4-7c106d1149d4
+		summarizeBy: none
+		sourceColumn: dataset_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column workspace_id
+		dataType: string
+		lineageTag: 2180a374-c270-4939-a5da-30d6b4e7d12f
+		summarizeBy: none
+		sourceColumn: workspace_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column configured_by
+		dataType: string
+		lineageTag: b49b3653-fea5-4d5c-a714-e2e3633b1b19
+		summarizeBy: none
+		sourceColumn: configured_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column storage_mode
+		dataType: string
+		lineageTag: 7d8d5b65-d8c9-4d0b-8389-892721838fea
+		summarizeBy: none
+		sourceColumn: storage_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column size_mb
+		dataType: double
+		lineageTag: 1b232f9b-e8ca-4b5e-951e-57367f2bceb6
+		summarizeBy: sum
+		sourceColumn: size_mb
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column is_refreshable
+		dataType: int64
+		formatString: 0
+		lineageTag: ce91f15f-9bda-4657-8d18-763f17397789
+		summarizeBy: sum
+		sourceColumn: is_refreshable
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_refresh_schedule
+		dataType: int64
+		formatString: 0
+		lineageTag: a7034492-18ab-4133-8ced-07c31f262771
+		summarizeBy: sum
+		sourceColumn: has_refresh_schedule
+
+		annotation SummarizationSetBy = Automatic
+
+	column gateway_id
+		dataType: string
+		lineageTag: c7db0e75-2c62-4356-848b-92472070c9d0
+		summarizeBy: none
+		sourceColumn: gateway_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column rls_enabled
+		dataType: int64
+		formatString: 0
+		lineageTag: 2bcde3e3-f196-421e-8f43-30e3e06b864c
+		summarizeBy: sum
+		sourceColumn: rls_enabled
+
+		annotation SummarizationSetBy = Automatic
+
+	column endorsement
+		dataType: string
+		lineageTag: 5a5f2916-b915-4c3e-bca7-94cfbfae3fd8
+		summarizeBy: none
+		sourceColumn: endorsement
+
+		annotation SummarizationSetBy = Automatic
+
+	column sensitivity_label
+		dataType: string
+		lineageTag: 2cdb145b-a142-4ddf-b293-11efbf8bca14
+		summarizeBy: none
+		sourceColumn: sensitivity_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6b4acf06-2ffc-4fc2-bcd2-ef47cec4e4e2
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dim_dataset = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_dataset.csv"), [Delimiter = ",", Columns = 13, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"dataset_id", type text}, {"dataset_name", type text}, {"workspace_id", type text}, {"configured_by", type text}, {"storage_mode", type text}, {"size_mb", type number}, {"is_refreshable", Int64.Type}, {"has_refresh_schedule", Int64.Type}, {"gateway_id", type text}, {"rls_enabled", Int64.Type}, {"endorsement", type text}, {"sensitivity_label", type text}, {"created_date", type date}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

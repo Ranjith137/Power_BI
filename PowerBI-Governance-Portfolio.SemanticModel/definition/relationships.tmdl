@@ -1,0 +1,36 @@
+relationship 12aca2ac-ba1e-e894-9867-d42303dacbc6
+	fromColumn: fact_activity.date
+	toColumn: dim_date.date
+
+relationship 91d1a746-6bf3-120d-d90a-f25863b041aa
+	fromColumn: fact_refresh.date
+	toColumn: dim_date.date
+
+relationship 4c5720c6-bb25-cedd-8c6e-1bcf0bb25d47
+	fromColumn: fact_capacity_daily.date
+	toColumn: dim_date.date
+
+relationship b9cc7250-0f48-9b1e-9815-bf53e37499aa
+	fromColumn: fact_activity.workspace_id
+	toColumn: dim_workspace.workspace_id
+
+relationship a8ee1840-285a-03ab-9475-24ee9b5ff7a3
+	fromColumn: bridge_workspace_access.workspace_id
+	toColumn: dim_workspace.workspace_id
+
+relationship 752b4b00-034a-5f0e-7903-a96ce66b9137
+	fromColumn: fact_activity.report_id
+	toColumn: dim_report.report_id
+
+relationship f6d96524-cc66-4560-ba05-abcf607d3826
+	fromColumn: fact_activity.user_id
+	toColumn: dim_user.user_id
+
+relationship ac32cc2a-fdcd-c846-bec0-bc7e1c485fa5
+	fromColumn: dim_dataset.gateway_id
+	toColumn: dim_gateway.gateway_id
+
+relationship 941814b9-b13b-9a08-f0ad-234ea69ebbee
+	fromColumn: fact_refresh.dataset_id
+	toColumn: dim_dataset.dataset_id
+

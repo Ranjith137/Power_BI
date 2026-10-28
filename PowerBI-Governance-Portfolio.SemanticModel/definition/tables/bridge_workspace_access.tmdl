@@ -1,0 +1,59 @@
+table bridge_workspace_access
+	lineageTag: 8b488813-978e-4558-aa90-6fc84d303fe9
+
+	column workspace_id
+		dataType: string
+		lineageTag: 01851729-848c-49b2-9d03-b59112a98c0c
+		summarizeBy: none
+		sourceColumn: workspace_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column principal
+		dataType: string
+		lineageTag: 108696a3-27f8-42d3-9db1-69667e2c060b
+		summarizeBy: none
+		sourceColumn: principal
+
+		annotation SummarizationSetBy = Automatic
+
+	column role
+		dataType: string
+		lineageTag: ab94affd-3efb-4778-ad6f-3b2520c380bd
+		summarizeBy: none
+		sourceColumn: role
+
+		annotation SummarizationSetBy = Automatic
+
+	column principal_type
+		dataType: string
+		lineageTag: 65c5aaf7-2e87-416e-9f45-bc4f682b9800
+		summarizeBy: none
+		sourceColumn: principal_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_account_enabled
+		dataType: double
+		lineageTag: a9ac1a78-c84c-47b9-bc20-b8c3f8bfafd6
+		summarizeBy: sum
+		sourceColumn: is_account_enabled
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition bridge_workspace_access = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\bridge_workspace_access.csv"), [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Merged queries" = Table.NestedJoin(#"Promoted headers", {"principal"}, dim_user, {"user_id"}, "dim_user", JoinKind.LeftOuter),
+				  #"Expanded dim_user" = Table.ExpandTableColumn(#"Merged queries", "dim_user", {"is_account_enabled"}, {"is_account_enabled"}),
+				  #"Replaced value" = Table.ReplaceValue(#"Expanded dim_user", null, 1, Replacer.ReplaceValue, {"is_account_enabled"})
+				in
+				  #"Replaced value"
+
+	annotation PBI_ResultType = Table
+

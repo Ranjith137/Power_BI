@@ -1,0 +1,100 @@
+table fact_activity
+	lineageTag: 1fb7c70d-95e2-4db3-9894-a940b4240bc6
+
+	column activity_id
+		dataType: string
+		lineageTag: 9ca77e47-d613-4e64-bfd1-323a1b66ea74
+		summarizeBy: none
+		sourceColumn: activity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2c46f9ed-75c6-4b68-85aa-8d1fa4e2a615
+		summarizeBy: none
+		sourceColumn: timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c454b19a-281f-4c09-a894-399926903ac7
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column user_id
+		dataType: string
+		lineageTag: 6ec1de55-a035-4ef1-8555-9b09c04aeb03
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity
+		dataType: string
+		lineageTag: 15d73a86-a89d-42e5-880c-3e330351e8ef
+		summarizeBy: none
+		sourceColumn: activity
+
+		annotation SummarizationSetBy = Automatic
+
+	column report_id
+		dataType: string
+		lineageTag: 6b1bef2c-b8a0-4498-9020-1632b4235d71
+		summarizeBy: none
+		sourceColumn: report_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column workspace_id
+		dataType: string
+		lineageTag: 15887bef-bd44-48ee-a07e-3125251ae091
+		summarizeBy: none
+		sourceColumn: workspace_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column client
+		dataType: string
+		lineageTag: 5d0d1b81-0357-4622-83c6-428249cd4048
+		summarizeBy: none
+		sourceColumn: client
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: 7c4c106d-67f3-4dd9-aa50-9aa7a3bb97e6
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_external_share
+		dataType: int64
+		formatString: 0
+		lineageTag: fa949492-01a8-4e93-a2f5-6b6208d94562
+		summarizeBy: sum
+		sourceColumn: is_external_share
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_activity = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\fact_activity.csv"), [Delimiter = ",", Columns = 10, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"activity_id", type text}, {"timestamp", type datetime}, {"date", type date}, {"user_id", type text}, {"activity", type text}, {"report_id", type text}, {"workspace_id", type text}, {"client", type text}, {"country", type text}, {"is_external_share", Int64.Type}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

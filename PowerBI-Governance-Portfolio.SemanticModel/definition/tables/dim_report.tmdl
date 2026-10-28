@@ -1,0 +1,90 @@
+table dim_report
+	lineageTag: 2cf95d07-4e68-46b9-bdb0-c73a462be22f
+
+	column report_id
+		dataType: string
+		lineageTag: 245ca380-040b-4834-ac51-a2908ea44d1d
+		summarizeBy: none
+		sourceColumn: report_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column report_name
+		dataType: string
+		lineageTag: 46f22c0f-ab5f-468d-9aec-742236cf8d1f
+		summarizeBy: none
+		sourceColumn: report_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column workspace_id
+		dataType: string
+		lineageTag: 9843aef7-eeee-453d-8109-f060edfad723
+		summarizeBy: none
+		sourceColumn: workspace_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataset_id
+		dataType: string
+		lineageTag: 1552fda0-75cd-46af-860b-48f61bc0c4e1
+		summarizeBy: none
+		sourceColumn: dataset_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 728583a3-c04c-47e8-972e-f7c66fdd4a5b
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e00242b2-1f05-433c-a42d-a5efb403b3a9
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column report_type
+		dataType: string
+		lineageTag: d3e1b861-6011-4f02-8a22-ac3aa4bd4ab2
+		summarizeBy: none
+		sourceColumn: report_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column endorsement
+		dataType: string
+		lineageTag: 9695132c-37bd-47ca-93cc-5c91e299f510
+		summarizeBy: none
+		sourceColumn: endorsement
+
+		annotation SummarizationSetBy = Automatic
+
+	column sensitivity_label
+		dataType: string
+		lineageTag: 1375076e-1d62-41d2-89b6-e186c6ac4f3e
+		summarizeBy: none
+		sourceColumn: sensitivity_label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_report = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_report.csv"), [Delimiter = ",", Columns = 9, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"report_id", type text}, {"report_name", type text}, {"workspace_id", type text}, {"dataset_id", type text}, {"created_by", type text}, {"created_date", type date}, {"report_type", type text}, {"endorsement", type text}, {"sensitivity_label", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

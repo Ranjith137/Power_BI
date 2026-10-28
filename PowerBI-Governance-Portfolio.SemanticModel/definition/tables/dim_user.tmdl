@@ -1,0 +1,83 @@
+table dim_user
+	lineageTag: 974a7a8c-2b46-40b4-8152-0c3084bd91e8
+
+	column user_id
+		dataType: string
+		lineageTag: f712739a-d079-45eb-8bc9-15a47ce62d42
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column display_name
+		dataType: string
+		lineageTag: 498b9745-ac0c-44fb-bbfb-2493d737349b
+		summarizeBy: none
+		sourceColumn: display_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: ab64e530-2856-41ba-80bf-500d95fe3261
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column department
+		dataType: string
+		lineageTag: d0cadde0-8681-4aac-a8ed-3327bbff7e72
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column license_type
+		dataType: string
+		lineageTag: ce5db7b7-7fc4-477a-b03d-4447cd5b8f99
+		summarizeBy: none
+		sourceColumn: license_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: acae4614-22c4-4edc-9a3d-5d9bb967f42e
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_account_enabled
+		dataType: int64
+		formatString: 0
+		lineageTag: 6caf1d30-e576-4d3e-9874-79d18e8d83db
+		summarizeBy: none
+		sourceColumn: is_account_enabled
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_signin_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 90517ffd-78ed-4624-a547-a24b7d79f356
+		summarizeBy: none
+		sourceColumn: last_signin_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dim_user = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Ranji\Downloads\Portfolio new\files\dim_user.csv"), [Delimiter = ",", Columns = 8, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"user_id", type text}, {"display_name", type text}, {"email", type text}, {"department", type text}, {"license_type", type text}, {"country", type text}, {"is_account_enabled", Int64.Type}, {"last_signin_date", type date}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

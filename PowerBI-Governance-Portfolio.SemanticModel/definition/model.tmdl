@@ -11,5 +11,22 @@ annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_ProTooling = ["DevMode"]
 
+annotation PBI_QueryOrder = ["bridge_workspace_access","dim_capacity","dim_dataset","dim_datasource","dim_date","dim_gateway","dim_report","dim_tenant_setting","dim_user","dim_workspace","fact_activity","fact_capacity_daily","fact_refresh","_Measures"]
+
+ref table bridge_workspace_access
+ref table dim_capacity
+ref table dim_dataset
+ref table dim_datasource
+ref table dim_date
+ref table dim_gateway
+ref table dim_report
+ref table dim_tenant_setting
+ref table dim_user
+ref table dim_workspace
+ref table fact_activity
+ref table fact_capacity_daily
+ref table fact_refresh
+ref table _Measures
+
 ref cultureInfo en-US
 
